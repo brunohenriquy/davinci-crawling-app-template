@@ -17,45 +17,15 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf import settings
 from django.conf.urls import url, include
-from django.urls import path
 
-from rest_framework_cache.registry import cache_registry
 from rest_framework.schemas import get_schema_view
 
-from django.contrib import admin
-
-from caravaggio_rest_api.users.urls import urlpatterns as users_urls
-from caravaggio_rest_api.views import CustomAuthToken, get_swagger_view
+from caravaggio_rest_api.views import get_swagger_view
 
 from {{ app_name | lower }}.api.urls import urlpatterns as {{ app_name | lower }}_urls
 
 urlpatterns = [
-    # ## DO NOT TOUCH
-
-    # Django REST Framework auth urls
-    url(r'^api-auth/',
-        include('rest_framework.urls', namespace='rest_framework')),
-
-    # Mechanism for clients to obtain a token given the username and password.
-    url(r'^api-token-auth/', CustomAuthToken.as_view()),
-
-    # Access to the admin site
-    url(r'^admin/', admin.site.urls),
-
-    # Django Rest Framework Swagger documentation
-    url(r'^schema/$',
-        get_swagger_view(title='API Documentation')),
-
-    url(r'^api-schema/users/$',
-        get_schema_view(title="Uses API",
-                        patterns=[url(r'^users/',
-                                      include(users_urls))])),
-
-    # Users API version
-    url(r'^users/', include(users_urls)),
-
     url(r'^api-schema/{{ app_name | lower }}/$',
         get_schema_view(title="{{ app_name | capfirst }} API",
                         patterns=[url(r'^{{ app_name | lower }}/',
@@ -65,14 +35,3 @@ urlpatterns = [
     url(r'^{{ app_name | lower }}/', include({{ app_name | lower }}_urls)),
 ]
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-
-        # For django versions before 2.0:
-        # url(r'^__debug__/', include(debug_toolbar.urls)),
-
-    ] + urlpatterns
-
-cache_registry.autodiscover()

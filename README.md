@@ -1,4 +1,4 @@
-# {{ app_name }} Crawler
+# {{ app_name | capfirst }} Crawler
 
 __Title__:
 
@@ -40,7 +40,7 @@ With the following conditions:
  
  ## Code
 
-The crawler code is inside the implementation of the `Crawler class` at `{{ app_name | lower }}.crawlers.{{ app_name }}Crawler`. 
+The crawler code is inside the implementation of the `Crawler class` at `{{ app_name | lower }}.crawlers.{{ app_name | capfirst }}Crawler`. 
 
 __crawl.py__: is the main function of the crawler. 
 
@@ -118,7 +118,7 @@ The output will be something like:
 Creating test database for alias 'default'...
 Creating test database for alias 'cassandra'...
 Creating keyspace test_apian [CONNECTION cassandra] ..
-Syncing {{ app_name | lower }}.models.{{ app_name }}Resource
+Syncing {{ app_name | lower }}.models.{{ app_name | capfirst }}Resource
 System check identified no issues (0 silenced).
 ...
 ...
