@@ -103,8 +103,8 @@ python crawl.py {{ app_name | lower }} \
     --phantomjs-path "/phantomjs-2.1.1-macosx/bin/phantomjs" \
     --workers-num 5 \
     --io-gs-project centering-badge-212119 \
-    --cache-dir "gs://davinci_crawler_{{ app_name | lower }}" \
-    --local-dir "fs:///data/davinci_crawler_{{ app_name | lower }}/local"
+    --cache-dir "gs://davinci_crawling" \
+    --local-dir "fs:///data/davinci_crawling/local"
 ```
 
 ### Run the tests
