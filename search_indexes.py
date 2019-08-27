@@ -8,14 +8,14 @@ from haystack import indexes
 
 from caravaggio_rest_api.haystack.indexes import BaseSearchIndex
 
-from {{ app_name | lower }} import CRAWLER_NAME
-from .models import {{ app_name | capfirst }}Resource
+from {{ project_name | lower }} import CRAWLER_NAME
+from .models import {{ project_name | capfirst }}Resource
 
 _logger = logging.getLogger("davinci_crawler_{}.search_indexes".
                             format(CRAWLER_NAME))
 
 
-class {{ app_name | capfirst }}ResourceIndex(BaseSearchIndex, indexes.Indexable):
+class {{ project_name | capfirst }}ResourceIndex(BaseSearchIndex, indexes.Indexable):
 
     user = indexes.CharField(
         model_attr="user")
@@ -77,7 +77,7 @@ class {{ app_name | capfirst }}ResourceIndex(BaseSearchIndex, indexes.Indexable)
         }
 
     def get_model(self):
-        return {{ app_name | capfirst }}Resource
+        return {{ project_name | capfirst }}Resource
 
     def index_queryset(self, using=None):
         return self.get_model().objects.filter(

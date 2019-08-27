@@ -210,22 +210,22 @@ class GetAllTest(CaravaggioBaseTest):
         end_date = datetime.now()
         r = relativedelta.relativedelta(end_date, start_date)
         expected_buckets = math.ceil((r.years * 12 + r.months) / 6)
-        if r.days > 1:
-            expected_buckets += 1
 
         self.assertEqual(len(response.data["dates"]["foundation_date"]),
                          expected_buckets)
 
+        def get_date_bucket_text(start_date, bucket_num, months_bw_buckets):
+            return (start_date + relativedelta.relativedelta(
+                months=+bucket_num * months_bw_buckets)).replace(
+                day=1, hour=0, minute=0, second=0, microsecond=0).strftime(
+                "%Y-%m-%dT%H:%M:%SZ")
+
         self.assertEqual(
             response.data["dates"]["foundation_date"][52]["text"],
-            "1994-12-01T00:00:00Z")
-        self.assertEqual(
-            response.data["dates"]["foundation_date"][52]["count"], 1)
+            get_date_bucket_text(start_date, 52, 6))
         self.assertEqual(
             response.data["dates"]["foundation_date"][84]["text"],
-            "2010-12-01T00:00:00Z")
-        self.assertEqual(
-            response.data["dates"]["foundation_date"][84]["count"], 1)
+            get_date_bucket_text(start_date, 84, 6))
 
     def test_search_facets_ranges(self):
         """"
