@@ -50,20 +50,36 @@ The __utils.py__ contains some utility methods to manage the control files and d
 
 ### Installation
 
-To run the crawler we will need to install the [PhantomJS](http://phantomjs.org/) library.
+To run the crawler we will need to install the Chromium and Chromedriver tools.
 
-- In MacOS we can use brew to install it: `brew install phantomjs`
+We can install the libraries using Homebrew:
 
-- In [this page](http://phantomjs.org/download.html) we can also found the installers for all the platforms.
+1. Chromium browser
 
-We will need to remember the installation folder because a reference to the `..../bin/phantomjs` folder will be needed. 
+```bash
+$ brew cask install chromium
+```
 
-The crawler is implemented for Python 3.7. Then we will need a 3.7 environment ready to install the dependencies.
+2. Chromedriver
+```bash
+$ brew cask install chromedriver
+```
+
+We can test the installation running the following instruction:
+
+```bash
+$ chromedriver --version
+ChromeDriver 77.0.3865.40 (f484704e052e0b556f8030b65b953dce96503217-refs/branch-heads/3865@{#442})
+```
+
+We will need to remember the Chromium binary file location because a reference to the `/Applications/Chromium.app/Contents/MacOS/Chromium` file will be needed. 
+
+The crawler is implemented for Python 3.6. Then we will need a 3.6 environment ready to install the dependencies.
 
 We can use [Anaconda](https://conda.io/docs/installation.html) to manage the environment. Once Anaconda is present in our system, we can do the following steps:
 
 ```
-$ conda create -n bovespa_crawler python=3.7
+$ conda create -n bovespa_crawler python=3.6
 $ conda activate bovespa_crawler
 $ python setup install
 ``` 
@@ -85,7 +101,7 @@ To run the crawler we only need to run the `crawl.py` script. The crawler can be
 
 Arguments:
 
-- `--phantomjs-path`: The path where we can found the PanthomJS library installed. Default: `None`. Ex: "/phantomjs-2.1.1-macosx/bin/phantomjs".
+- `--chromium-bin-file`: The path where we can found the Chromium binary installed. Default: `None`. Ex: "/Applications/Chromium.app/Contents/MacOS/Chromium".
 
 - `--from-date`: Extract only the data after an specific date. Default: `None`. Ex: "2018-01-01".
 
@@ -100,7 +116,7 @@ Examples:
 
 ```
 python crawl.py {{ app_name | lower }} \
-    --phantomjs-path "/phantomjs-2.1.1-macosx/bin/phantomjs" \
+    --chromium-bin-file '/Applications/Chromium.app/Contents/MacOS/Chromium' \
     --workers-num 5 \
     --io-gs-project centering-badge-212119 \
     --cache-dir "gs://davinci_crawling" \
