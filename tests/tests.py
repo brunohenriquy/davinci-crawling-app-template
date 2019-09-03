@@ -211,8 +211,8 @@ class GetAllTest(CaravaggioBaseTest):
         r = relativedelta.relativedelta(end_date, start_date)
         expected_buckets = math.ceil((r.years * 12 + r.months) / 6)
 
-        self.assertEqual(len(response.data["dates"]["foundation_date"]),
-                         expected_buckets)
+        self.assertIn(len(response.data["dates"]["foundation_date"]),
+                         [expected_buckets, expected_buckets+1])
 
         def get_date_bucket_text(start_date, bucket_num, months_bw_buckets):
             return (start_date + relativedelta.relativedelta(
