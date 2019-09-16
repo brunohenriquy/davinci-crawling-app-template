@@ -44,11 +44,16 @@ class GetAllTest(CaravaggioBaseTest):
         # Let's create some extra users to use as owners of the data
 
         # This user represents a crawler user (automatic user)
-        cls.crunchbase = User.objects.create(
-            username="crunchbase", password="crunchbase")
+        cls.crunchbase = cls.create_user(
+            email="crunchbase@harvester.com",
+            first_name="CrunchBase",
+            last_name="Crawler")
+
         # This user represents a human user
-        cls.manual_user_1 = User.objects.create(
-            username="manual_user", password="manual_user")
+        cls.manual_user_1 = cls.create_user(
+            email="user@mycompany.com",
+            first_name="Jorge",
+            last_name="Clooney")
 
         # We clean the test database ({{ app_name }}Resource)
         delete_all_records({{ app_name | capfirst }}Resource)
