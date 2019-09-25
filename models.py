@@ -2,7 +2,7 @@
 # Copyright (c) 2018-2019 BuildGroup Data Services Inc.
 
 import logging
-from datetime import datetime
+from django.utils import timezone
 import uuid
 
 from caravaggio_rest_api.dse.models import \
@@ -36,8 +36,8 @@ class {{ app_name | capfirst }}Resource(CustomDjangoCassandraModel):
     user = columns.Text(primary_key=True)
 
     # When was created the entity and the last modification date
-    created_at = columns.DateTime(default=datetime.utcnow)
-    updated_at = columns.DateTime(default=datetime.utcnow)
+    created_at = columns.DateTime(default=timezone.now)
+    updated_at = columns.DateTime(default=timezone.now)
 
     # Controls if the entity is active or has been deleted
     is_deleted = columns.Boolean(default=False)
@@ -94,7 +94,7 @@ class {{ app_name | capfirst }}Resource(CustomDjangoCassandraModel):
 @receiver(pre_save, sender={{ app_name | capfirst }}Resource)
 def pre_save_{{ app_name | lower }}_resource(
         sender, instance=None, using=None, update_fields=None, **kwargs):
-    instance.updated_at = datetime.utcnow()
+    instance.updated_at = timezone.now()
 
     # Convert the latitude and longitude into a Geo Point in text
     # This is the field Solr understands and can index
