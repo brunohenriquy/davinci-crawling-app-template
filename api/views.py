@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*
-from drf_haystack.filters import HaystackFilter, HaystackBoostFilter, \
-    HaystackGEOSpatialFilter, HaystackFacetFilter
-
-from caravaggio_rest_api.drf_haystack.filters import \
-    HaystackOrderingFilter
-
 from caravaggio_rest_api.drf_haystack.viewsets import \
-    CustomModelViewSet, CustomHaystackViewSet
-
+    CaravaggioCassandraModelViewSet, \
+    CaravaggioHaystackGEOSearchViewSet, \
+    CaravaggioHaystackFacetSearchViewSet
 
 # from rest_framework.authentication import \
 #    TokenAuthentication, SessionAuthentication
@@ -23,7 +18,7 @@ from .serializers import {{ app_name | capfirst }}ResourceSerializerV1, \
 from {{ app_name | lower }}.models import {{app_name | capfirst}}Resource
 
 
-class {{ app_name | capfirst }}ResourceViewSet(CustomModelViewSet):
+class {{ app_name | capfirst }}ResourceViewSet(CaravaggioCassandraModelViewSet):
     queryset = {{ app_name | capfirst }}Resource.objects.all()
 
     # Defined in the settings as default authentication classes
@@ -35,15 +30,8 @@ class {{ app_name | capfirst }}ResourceViewSet(CustomModelViewSet):
 
     serializer_class = {{ app_name | capfirst }}ResourceSerializerV1
 
-    filter_fields = ("_id", "created_at", "updated_at", "situation",
-                     'country_code')
 
-
-class {{ app_name | capfirst }}ResourceSearchViewSet(mixins.FacetMixin, CustomHaystackViewSet):
-
-    filter_backends = [
-        HaystackFilter, HaystackBoostFilter,
-        HaystackFacetFilter, HaystackOrderingFilter]
+class {{ app_name | capfirst }}ResourceSearchViewSet(CaravaggioHaystackFacetSearchViewSet):
 
     # `index_models` is an optional list of which models you would like
     #  to include in the search result. You might have several models
@@ -75,11 +63,7 @@ class {{ app_name | capfirst }}ResourceSearchViewSet(mixins.FacetMixin, CustomHa
         "created_at", "updated_at")
 
 
-class {{ app_name | capfirst }}ResourceGEOSearchViewSet(CustomHaystackViewSet):
-
-    filter_backends = [
-        HaystackFilter, HaystackBoostFilter,
-        HaystackGEOSpatialFilter, HaystackOrderingFilter]
+class {{ app_name | capfirst }}ResourceGEOSearchViewSet(CaravaggioHaystackGEOSearchViewSet):
 
     # `index_models` is an optional list of which models you would like
     #  to include in the search result. You might have several models
