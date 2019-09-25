@@ -65,7 +65,7 @@ class GetAllTest(CaravaggioBaseTest):
             load_test_data("{}/data.json".format(current_path),
                            {{ app_name | capfirst }}ResourceSerializerV1)
 
-    def test_create_resources(self):
+    def step1_create_resources(self):
         for resource in self.resources:
             _logger.info("POST Resource: {}".format(resource["name"]))
             response = self.api_client.post(reverse("{{ app_name | lower }}-list"),
@@ -82,7 +82,7 @@ class GetAllTest(CaravaggioBaseTest):
         # We need to give time for the next search tests
         time.sleep(0.5)
 
-    def test_get_resources(self):
+    def step2_get_resources(self):
         for index, resource_id in enumerate(self.persisted_resources):
             original_resource = self.resources[index]
             path = "{0}{1}/".format(reverse("{{ app_name | lower }}-list"), resource_id)
@@ -95,7 +95,7 @@ class GetAllTest(CaravaggioBaseTest):
                 response.data, original_resource,
                 ["_id", "created_at", "updated_at"])
 
-    def test_search_text(self):
+    def step3_search_text(self):
         """
         We search any resource that contains a text in the text field, that is
         a field that concentrates all the textual fields
@@ -113,7 +113,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["results"][0], self.resources[1],
             ["_id", "created_at", "updated_at", "score"])
 
-    def test_search_specialties(self):
+    def step4_search_specialties(self):
         """"
         Get resources that have "Internet" in their specialties.
 
@@ -143,7 +143,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["results"][0], self.resources[1],
             ["_id", "created_at", "updated_at", "score"])
 
-    def test_search_geo(self):
+    def step5_search_geo(self):
         """"
         Will get all the resources within 10 km from the point
              with longitude -123.25022 and latitude 44.59641.
@@ -160,7 +160,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["results"][0], self.resources[1],
             ["_id", "created_at", "updated_at", "score"])
 
-    def test_search_facets(self):
+    def step6_search_facets(self):
         """"
         Will get all the faces for the existent resources
         """
@@ -232,7 +232,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["dates"]["foundation_date"][84]["text"],
             get_date_bucket_text(start_date, 84, 6))
 
-    def test_search_facets_ranges(self):
+    def step7_search_facets_ranges(self):
         """"
         Let's change the foundation_date facet range by all the years from
         1st Jan 2010 til today. Total: 8 years/buckets
@@ -252,7 +252,7 @@ class GetAllTest(CaravaggioBaseTest):
         self.assertTrue("2011-01-01T00:00:00Z" in buckets)
         self.assertEqual(buckets["2011-01-01T00:00:00Z"], 1)
 
-    def test_search_facets_narrow(self):
+    def step8_search_facets_narrow(self):
         """"
         Drill down when selection facets
         """
