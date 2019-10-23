@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2018-2019 BuildGroup Data Services Inc.
+# -*- coding: utf-8 -*
+# Copyright (c) 2019 BuildGroup Data Services Inc.
 
 import logging
 from django.utils import timezone
@@ -86,8 +86,8 @@ class {{ app_name | capfirst }}Resource(CustomDjangoCassandraModel):
 
         if self.situation not in SITUATIONS:
             raise ValidationError(
-                "Invalid situation [{0}]. Valid situations are: {1}.".
-                    format(self.situation, SITUATIONS))
+                "Invalid situation [{0}]. Valid situations are: "
+                "{1}.".format(self.situation, SITUATIONS))
 
 
 # We need to set the new value for the changed_at field

@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
+# Copyright (c) 2019 BuildGroup Data Services Inc.
 import os
 import json
 import logging
@@ -172,44 +173,41 @@ class GetAllTest(CaravaggioBaseTest):
 
         self.assertEqual(len(response.data["fields"]["country_code"]), 1)
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["text"], "USA")
+            "fields"]["country_code"][0]["text"], "USA")
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["count"], 2)
+            "fields"]["country_code"][0]["count"], 2)
 
         self.assertEqual(len(response.data["fields"]["crawl_param"]), 2)
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][0]["text"], '1')
+            "fields"]["crawl_param"][0]["text"], '1')
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][0]["count"], 1)
+            "fields"]["crawl_param"][0]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][1]["text"], '2')
+            "fields"]["crawl_param"][1]["text"], '2')
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][1]["count"], 1)
+            "fields"]["crawl_param"][1]["count"], 1)
 
         self.assertEqual(len(response.data["fields"]["specialties"]), 5)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][0]["text"], "Internet")
+            "fields"]["specialties"][0]["text"], "Internet")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][0]["count"], 2)
+            "fields"]["specialties"][0]["count"], 2)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][1]["text"], "Hardware")
+            "fields"]["specialties"][1]["text"], "Hardware")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][1]["count"], 1)
+            "fields"]["specialties"][1]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][2]["text"],
-                         "Machine Learning")
+            "fields"]["specialties"][2]["text"], "Machine Learning")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][2]["count"], 1)
+            "fields"]["specialties"][2]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][3]["text"],
-                         "Predictive Analytics")
+            "fields"]["specialties"][3]["text"], "Predictive Analytics")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][3]["count"], 1)
+            "fields"]["specialties"][3]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][4]["text"],
-                         "Telecommunications")
+            "fields"]["specialties"][4]["text"], "Telecommunications")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][4]["count"], 1)
+            "fields"]["specialties"][4]["count"], 1)
 
         start_date = datetime.now() - timedelta(days=50 * 365)
         end_date = datetime.now()
@@ -217,7 +215,7 @@ class GetAllTest(CaravaggioBaseTest):
         expected_buckets = math.ceil((r.years * 12 + r.months) / 6)
 
         self.assertIn(len(response.data["dates"]["foundation_date"]),
-                         [expected_buckets, expected_buckets+1])
+                      [expected_buckets, expected_buckets + 1])
 
         def get_date_bucket_text(start_date, bucket_num, months_bw_buckets):
             return (start_date + relativedelta.relativedelta(
@@ -265,9 +263,9 @@ class GetAllTest(CaravaggioBaseTest):
 
         self.assertEqual(len(response.data["fields"]["country_code"]), 1)
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["text"], "USA")
+            "fields"]["country_code"][0]["text"], "USA")
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["count"], 1)
+            "fields"]["country_code"][0]["count"], 1)
 
         self.assertEqual(len(response.data["fields"]["specialties"]), 5)
 

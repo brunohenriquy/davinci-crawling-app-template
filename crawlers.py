@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2018-2019 BuildGroup Data Services Inc.
+# -*- coding: utf-8 -*
+# Copyright (c) 2019 BuildGroup Data Services Inc.
 
 import logging
 import time
@@ -63,7 +63,7 @@ class {{ app_name | capfirst }}Crawler(Crawler):
                  "It is a way to short-circuit the global last/current dates."
                  " Ex. '2007-09-03T20:56:35.450686Z")
 
-    def crawl_params(self, **options):
+    def crawl_params(self, producer, **options):
         now = options.get("current_execution_date", datetime.utcnow())
         _logger.debug("{0}: Current execution time: {1}".
                       format(CRAWLER_NAME, now))
@@ -75,13 +75,14 @@ class {{ app_name | capfirst }}Crawler(Crawler):
 
         from_date = get_from_date(options, checkpoint_data)
 
-        ###### The Crawler logic to obtain the objects to be crawl comes here
+        # The Crawler logic to obtain the objects to be crawl comes here
         # BEGIN DEMO
         last_index = checkpoint_data.get(LAST_GENERATED_INDEX, 0)
-        crawling_params = range(last_index + 20)
+        for crawling_param in range(last_index, last_index + 20):
+            producer.add_crawl_params(crawling_param, options)
 
         checkpoint_data[LAST_GENERATED_INDEX] = last_index + 20
-        ### END DEMO
+        # END DEMO
 
         checkpoint_data[LAST_EXECUTION_DATE_CTL_FIELD] = now
 
@@ -91,12 +92,9 @@ class {{ app_name | capfirst }}Crawler(Crawler):
                             CRAWLER_FILE_CTL,
                             checkpoint_data)
 
-        return crawling_params
-
     def crawl(self, crawling_params, options):
         _logger.info(
-            "{0}: Crawling param [{1}]".
-                format(CRAWLER_NAME, crawling_params))
+            "{0}: Crawling param [{1}]".format(CRAWLER_NAME, crawling_params))
 
         ################################################################
         # The Crawler logic to crawl the data using the crawling params
@@ -137,7 +135,7 @@ class {{ app_name | capfirst }}Crawler(Crawler):
         while num_loops:
             time.sleep(5)
             _logger.info(
-                "{0}: Still crawling data for param [{1}]...".
-                    format(CRAWLER_NAME, crawling_params))
+                "{0}: Still crawling data for param [{1}]...".format(
+                    CRAWLER_NAME, crawling_params))
             num_loops -= 1
         # END DEMO

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*
+# Copyright (c) 2019 BuildGroup Data Services Inc.
 from datetime import datetime, timedelta
 from dateutil.parser import parse as parse_date
 
@@ -102,7 +103,7 @@ class {{ app_name | capfirst }}ResourceGEOSearchSerializerV1(
             "situation", "crawl_param", "foundation_date", "country_code",
             "latitude", "longitude", "specialties", "websites",
             "extra_data",
-            "text",  "score", "distance"
+            "text", "score", "distance"
         ]
 
 
@@ -117,7 +118,7 @@ class {{ app_name | capfirst }}ResourceFacetSerializerV1(HaystackFacetSerializer
     class Meta:
         index_classes = [{{ app_name | capfirst }}Resource]
         fields = ["created_at", "updated_at", "situation", 'crawl_param',
-                  "specialties", "foundation_date", "country_code",]
+                  "specialties", "foundation_date", "country_code"]
 
         field_options = {
             "situation": {},
@@ -131,7 +132,7 @@ class {{ app_name | capfirst }}ResourceFacetSerializerV1(HaystackFacetSerializer
                 "gap_amount": 6
             },
             "created_at": {
-                "start_date": datetime.now() - timedelta(days=5* 365),
+                "start_date": datetime.now() - timedelta(days=5 * 365),
                 "end_date": datetime.now(),
                 "gap_by": "month",
                 "gap_amount": 1

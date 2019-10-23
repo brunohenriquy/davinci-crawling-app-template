@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*
+# Copyright (c) 2019 BuildGroup Data Services Inc.
 from caravaggio_rest_api.drf_haystack.viewsets import \
     CaravaggioCassandraModelViewSet, \
     CaravaggioHaystackGEOSearchViewSet, \
