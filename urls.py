@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2018-2019 BuildGroup Data Services Inc.
+# -*- coding: utf-8 -*
+# Copyright (c) 2019 BuildGroup Data Services Inc.
 
 """
 {{ app_name | lower }} URL Configuration
@@ -34,4 +34,3 @@ urlpatterns = [
     # {{ app_name | capfirst }} API version
     url(r'^{{ app_name | lower }}/', include({{ app_name | lower }}_urls)),
 ]
-

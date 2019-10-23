@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
+# Copyright (c) 2019 BuildGroup Data Services Inc.
 import os
 import json
 import logging
@@ -44,11 +45,16 @@ class GetAllTest(CaravaggioBaseTest):
         # Let's create some extra users to use as owners of the data
 
         # This user represents a crawler user (automatic user)
-        cls.crunchbase = User.objects.create(
-            username="crunchbase", password="crunchbase")
+        cls.crunchbase = cls.create_user(
+            email="crunchbase@harvester.com",
+            first_name="CrunchBase",
+            last_name="Crawler")
+
         # This user represents a human user
-        cls.manual_user_1 = User.objects.create(
-            username="manual_user", password="manual_user")
+        cls.manual_user_1 = cls.create_user(
+            email="user@mycompany.com",
+            first_name="Jorge",
+            last_name="Clooney")
 
         # We clean the test database ({{ app_name }}Resource)
         delete_all_records({{ app_name | capfirst }}Resource)
@@ -60,7 +66,7 @@ class GetAllTest(CaravaggioBaseTest):
             load_test_data("{}/data.json".format(current_path),
                            {{ app_name | capfirst }}ResourceSerializerV1)
 
-    def test_create_resources(self):
+    def step1_create_resources(self):
         for resource in self.resources:
             _logger.info("POST Resource: {}".format(resource["name"]))
             response = self.api_client.post(reverse("{{ app_name | lower }}-list"),
@@ -77,7 +83,7 @@ class GetAllTest(CaravaggioBaseTest):
         # We need to give time for the next search tests
         time.sleep(0.5)
 
-    def test_get_resources(self):
+    def step2_get_resources(self):
         for index, resource_id in enumerate(self.persisted_resources):
             original_resource = self.resources[index]
             path = "{0}{1}/".format(reverse("{{ app_name | lower }}-list"), resource_id)
@@ -90,7 +96,7 @@ class GetAllTest(CaravaggioBaseTest):
                 response.data, original_resource,
                 ["_id", "created_at", "updated_at"])
 
-    def test_search_text(self):
+    def step3_search_text(self):
         """
         We search any resource that contains a text in the text field, that is
         a field that concentrates all the textual fields
@@ -108,7 +114,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["results"][0], self.resources[1],
             ["_id", "created_at", "updated_at", "score"])
 
-    def test_search_specialties(self):
+    def step4_search_specialties(self):
         """"
         Get resources that have "Internet" in their specialties.
 
@@ -138,7 +144,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["results"][0], self.resources[1],
             ["_id", "created_at", "updated_at", "score"])
 
-    def test_search_geo(self):
+    def step5_search_geo(self):
         """"
         Will get all the resources within 10 km from the point
              with longitude -123.25022 and latitude 44.59641.
@@ -155,7 +161,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["results"][0], self.resources[1],
             ["_id", "created_at", "updated_at", "score"])
 
-    def test_search_facets(self):
+    def step6_search_facets(self):
         """"
         Will get all the faces for the existent resources
         """
@@ -167,44 +173,41 @@ class GetAllTest(CaravaggioBaseTest):
 
         self.assertEqual(len(response.data["fields"]["country_code"]), 1)
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["text"], "USA")
+            "fields"]["country_code"][0]["text"], "USA")
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["count"], 2)
+            "fields"]["country_code"][0]["count"], 2)
 
         self.assertEqual(len(response.data["fields"]["crawl_param"]), 2)
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][0]["text"], '1')
+            "fields"]["crawl_param"][0]["text"], '1')
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][0]["count"], 1)
+            "fields"]["crawl_param"][0]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][1]["text"], '2')
+            "fields"]["crawl_param"][1]["text"], '2')
         self.assertEqual(response.data[
-                             "fields"]["crawl_param"][1]["count"], 1)
+            "fields"]["crawl_param"][1]["count"], 1)
 
         self.assertEqual(len(response.data["fields"]["specialties"]), 5)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][0]["text"], "Internet")
+            "fields"]["specialties"][0]["text"], "Internet")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][0]["count"], 2)
+            "fields"]["specialties"][0]["count"], 2)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][1]["text"], "Hardware")
+            "fields"]["specialties"][1]["text"], "Hardware")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][1]["count"], 1)
+            "fields"]["specialties"][1]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][2]["text"],
-                         "Machine Learning")
+            "fields"]["specialties"][2]["text"], "Machine Learning")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][2]["count"], 1)
+            "fields"]["specialties"][2]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][3]["text"],
-                         "Predictive Analytics")
+            "fields"]["specialties"][3]["text"], "Predictive Analytics")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][3]["count"], 1)
+            "fields"]["specialties"][3]["count"], 1)
         self.assertEqual(response.data[
-                             "fields"]["specialties"][4]["text"],
-                         "Telecommunications")
+            "fields"]["specialties"][4]["text"], "Telecommunications")
         self.assertEqual(response.data[
-                             "fields"]["specialties"][4]["count"], 1)
+            "fields"]["specialties"][4]["count"], 1)
 
         start_date = datetime.now() - timedelta(days=50 * 365)
         end_date = datetime.now()
@@ -212,7 +215,7 @@ class GetAllTest(CaravaggioBaseTest):
         expected_buckets = math.ceil((r.years * 12 + r.months) / 6)
 
         self.assertIn(len(response.data["dates"]["foundation_date"]),
-                         [expected_buckets, expected_buckets+1])
+                      [expected_buckets, expected_buckets + 1])
 
         def get_date_bucket_text(start_date, bucket_num, months_bw_buckets):
             return (start_date + relativedelta.relativedelta(
@@ -227,7 +230,7 @@ class GetAllTest(CaravaggioBaseTest):
             response.data["dates"]["foundation_date"][84]["text"],
             get_date_bucket_text(start_date, 84, 6))
 
-    def test_search_facets_ranges(self):
+    def step7_search_facets_ranges(self):
         """"
         Let's change the foundation_date facet range by all the years from
         1st Jan 2010 til today. Total: 8 years/buckets
@@ -247,7 +250,7 @@ class GetAllTest(CaravaggioBaseTest):
         self.assertTrue("2011-01-01T00:00:00Z" in buckets)
         self.assertEqual(buckets["2011-01-01T00:00:00Z"], 1)
 
-    def test_search_facets_narrow(self):
+    def step8_search_facets_narrow(self):
         """"
         Drill down when selection facets
         """
@@ -260,9 +263,9 @@ class GetAllTest(CaravaggioBaseTest):
 
         self.assertEqual(len(response.data["fields"]["country_code"]), 1)
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["text"], "USA")
+            "fields"]["country_code"][0]["text"], "USA")
         self.assertEqual(response.data[
-                             "fields"]["country_code"][0]["count"], 1)
+            "fields"]["country_code"][0]["count"], 1)
 
         self.assertEqual(len(response.data["fields"]["specialties"]), 5)
 
