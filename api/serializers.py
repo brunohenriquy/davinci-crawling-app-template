@@ -46,6 +46,21 @@ class {{ app_name | capfirst }}ResourceSerializerV1(
                   "extra_data")
         read_only_fields = ("_id", "user", "created_at", "updated_at")
 
+        extra_kwargs = {
+            '_id': {
+                'help_text': 'the id that is the unique partition key.'
+            },
+            'user': {
+                'help_text': 'The user that asked for the object.'
+            },
+            'created_at': {
+                'help_text': 'the date of the creation of the task.'
+            },
+            'updated_at': {
+                'help_text': 'the date that we last updated the task.'
+            },
+        }
+
 
 class {{ app_name | capfirst }}ResourceSearchSerializerV1(
         CustomHaystackSerializer, BaseCachedSerializerMixin):
