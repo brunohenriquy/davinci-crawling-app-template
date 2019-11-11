@@ -92,7 +92,7 @@ class {{ app_name | capfirst }}Crawler(Crawler):
                             CRAWLER_FILE_CTL,
                             checkpoint_data)
 
-    def crawl(self, crawling_params, options):
+    def crawl(self, task_id, crawling_params, options):
         _logger.info(
             "{0}: Crawling param [{1}]".format(CRAWLER_NAME, crawling_params))
 
