@@ -24,11 +24,11 @@ from {{ app_name | lower }}.api.views import \
     {{ app_name | capfirst }}ResourceSearchViewSet, \
     {{ app_name | capfirst }}ResourceGEOSearchViewSet
 
-from rest_framework import routers
+from caravaggio_rest_api.drf.routers import CaravaggioRouter
 
 # API v1 Router. Provide an easy way of automatically determining the URL conf.
 
-api_{{ app_name | upper }} = routers.DefaultRouter()
+api_{{ app_name | upper }} = CaravaggioRouter()
 
 if settings.DSE_SUPPORT:
     api_{{ app_name | upper }}.register(r'{{ app_name | lower }}/search',
