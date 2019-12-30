@@ -7,6 +7,7 @@ from django.utils import timezone
 from haystack import indexes
 
 from caravaggio_rest_api.haystack.indexes import BaseSearchIndex
+from caravaggio_rest_api.haystack import indexes as custom_indexes
 
 from {{ app_name | lower }} import CRAWLER_NAME
 from .models import {{ app_name | capfirst }}Resource
@@ -44,7 +45,7 @@ class {{ app_name | capfirst }}ResourceIndex(BaseSearchIndex, indexes.Indexable)
     coordinates = indexes.LocationField(
         model_attr="coordinates")
 
-    specialties = indexes.MultiValueField(
+    specialties = custom_indexes.CaravaggioListField(
         null=True, model_attr="specialties", faceted=True)
 
     websites = indexes.MultiValueField(
